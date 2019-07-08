@@ -9,6 +9,8 @@ import {stream as wiredep} from 'wiredep';
 
 const $ = gulpLoadPlugins();
 
+var nodepath =  'node_modules/';
+
 gulp.task('extras', () => {
   return gulp.src([
     'app/*.*',
@@ -16,6 +18,7 @@ gulp.task('extras', () => {
     '!app/scripts.babel',
     '!app/*.json',
     '!app/*.html',
+    '!app/styles.scss'
   ], {
     base: 'app',
     dot: true
@@ -55,7 +58,18 @@ gulp.task('images', () => {
     .pipe(gulp.dest('dist/images'));
 });
 
-gulp.task('html',  () => {
+gulp.task('styles', () => {
+  return gulp.src('app/styles.scss/*.scss')
+    .pipe($.plumber())
+    .pipe($.sass.sync({
+      outputStyle: 'expanded',
+      precision: 10,
+      includePaths: [nodepath + 'bootstrap/scss/']
+    }).on('error', $.sass.logError))
+    .pipe(gulp.dest('app/styles'));
+});
+
+gulp.task('html', ['styles'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.sourcemaps.init())
@@ -114,6 +128,7 @@ gulp.task('watch', ['lint', 'babel'], () => {
   ]).on('change', $.livereload.reload);
 
   gulp.watch(['app/scripts.babel/**/*.js', 'app/scripts.babel/**/*.vue'], ['lint', 'babel']);
+  gulp.watch('app/styles.scss/**/*.scss', ['styles']);
   gulp.watch('bower.json', ['wiredep']);
 });
 

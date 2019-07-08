@@ -1,5 +1,6 @@
 {
   "name": "__MSG_appName__",
+  "short_name": "BBTB",
   "version": "0.0.1",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
@@ -53,7 +54,7 @@
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
     },
-    "default_title": "bitbucket-tool-box",
+    "default_title": "BitBucket Tool Box",
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [
